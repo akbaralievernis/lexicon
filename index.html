@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Lexicon Drive — Смартборд</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="brandText">
+          <h1>Lexicon Drive</h1>
+          <div class="subtitle">Собери предложение по порядку • Нажимай слова снизу</div>
+        </div>
+      </div>
+
+      <div class="timerBox" aria-live="polite">
+        <div class="timerLabel">Осталось</div>
+        <div class="timer" id="globalTimer">60</div>
+        <div class="timerUnit">сек</div>
+      </div>
+
+      <div class="teacherBar">
+        <button class="tbtn" id="pauseBtn" title="Пауза / Продолжить">⏸ Пауза</button>
+        <button class="tbtn" id="freezeBtn" title="Заморозить / разморозить время">⏱ Заморозить время</button>
+        <button class="tbtn" id="skipA" title="Пропустить раунд Команды A">⏭ Пропуск A</button>
+        <button class="tbtn" id="skipB" title="Пропустить раунд Команды B">⏭ Пропуск B</button>
+
+        <div class="teacherRight">
+          <button class="btn" id="openSetupBtn">Меню</button>
+          <button class="btn danger" id="resetBtn">Сброс</button>
+          <button class="btn primary" id="startBtn">Старт</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- Team A -->
+      <section class="team teamA" id="teamA">
+        <div class="teamHeader">
+          <div class="teamName"><span class="badge"></span> Команда A</div>
+          <div class="teamMeta">
+            <div class="pillSmall">Раунд: <span id="roundA">—</span></div>
+            <div class="pillSmall">Комбо: <span id="comboA">x1.0</span></div>
+            <div class="pillSmall">Счёт: <span class="score" id="scoreA">0</span></div>
+          </div>
+        </div>
+
+        <div class="zone">
+          <div class="flashArea">
+            <div class="flashWord" id="flashA"></div>
+          </div>
+
+          <div class="infoRow">
+            <div class="note" id="noteA">Открой «Меню», вставь текст и нажми «Применить».</div>
+            <button class="btn small disabled" id="hintA">Подсказка (-200)</button>
+          </div>
+
+          <div class="workArea">
+            <div class="slots" id="slotsA"></div>
+            <div class="tiles" id="tilesA"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team B -->
+      <section class="team teamB" id="teamB">
+        <div class="teamHeader">
+          <div class="teamName"><span class="badge"></span> Команда B</div>
+          <div class="teamMeta">
+            <div class="pillSmall">Раунд: <span id="roundB">—</span></div>
+            <div class="pillSmall">Комбо: <span id="comboB">x1.0</span></div>
+            <div class="pillSmall">Счёт: <span class="score" id="scoreB">0</span></div>
+          </div>
+        </div>
+
+        <div class="zone">
+          <div class="flashArea">
+            <div class="flashWord" id="flashB"></div>
+          </div>
+
+          <div class="infoRow">
+            <div class="note" id="noteB">Нажимай слова по порядку снизу: 1 → 2 → 3…</div>
+            <button class="btn small disabled" id="hintB">Подсказка (-200)</button>
+          </div>
+
+          <div class="workArea">
+            <div class="slots" id="slotsB"></div>
+            <div class="tiles" id="tilesB"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- МЕНЮ -->
+  <div class="overlay" id="setupOverlay">
+    <div class="card cardModal">
+      <div class="cardHeader">
+        <div>
+          <h2>Меню (настройка учителя)</h2>
+          <p class="muted">
+            1 предложение = 1 раунд. Обе команды получают одинаковый текст и одинаковый порядок раундов.
+          </p>
+        </div>
+        <button class="btn" id="closeSetupBtn">Закрыть</button>
+      </div>
+
+      <div class="cardScroll">
+        <div class="cardBody">
+          <div class="field">
+            <label for="presetSelect">Готовые тексты</label>
+            <select id="presetSelect" class="select">
+              <option value="custom">— Пользовательский текст (вставить ниже) —</option>
+              <option value="rus_general">Русский — универсальный</option>
+              <option value="rus_school">Русский — школьный стиль</option>
+              <option value="rus_motivation">Русский — мотивационный</option>
+            </select>
+
+            <label for="textInput">Текст для раундов</label>
+            <textarea id="textInput" placeholder="Вставь текст. Лучше 8–14 слов в одном предложении."></textarea>
+
+            <div class="hintBox">
+              <b>Как играть:</b> после показа слов появятся плитки снизу — нажимай слова <b>строго по порядку</b>.
+            </div>
+          </div>
+
+          <div class="settings">
+            <div class="setTitle">Сложность и режимы</div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Скорость показа слов</div>
+                <div class="muted">мс на слово (меньше = быстрее)</div>
+              </div>
+              <div class="value" id="speedVal">800</div>
+            </div>
+            <input type="range" id="speedRange" min="250" max="1600" step="50" value="800" />
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Общий таймер</div>
+                <div class="muted">секунд на игру</div>
+              </div>
+              <div class="value" id="timeVal">60</div>
+            </div>
+            <input type="range" id="timeRange" min="20" max="180" step="5" value="60" />
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Штраф за 3 ошибки подряд</div>
+                <div class="muted">минус очки сразу на 3-й ошибке</div>
+              </div>
+              <div class="value" id="penaltyVal">150</div>
+            </div>
+            <input type="range" id="penaltyRange" min="50" max="500" step="25" value="150" />
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Супер скорость</div>
+                <div class="muted">по раундам скорость растёт</div>
+              </div>
+              <button class="toggle" id="superSpeedBtn">Выкл</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Шаг ускорения</div>
+                <div class="muted">на сколько мс быстрее каждый раунд</div>
+              </div>
+              <div class="value" id="speedStepVal">40</div>
+            </div>
+            <input type="range" id="speedStepRange" min="10" max="120" step="5" value="40" />
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Комбо-множитель</div>
+                <div class="muted">серия правильных увеличивает x</div>
+              </div>
+              <button class="toggle" id="comboBtn">Вкл</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Скрытый режим</div>
+                <div class="muted">после ошибки плитки исчезают на 2 сек</div>
+              </div>
+              <button class="toggle" id="hiddenBtn">Выкл</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Звук</div>
+                <div class="muted">правильно / ошибка / штраф / победа</div>
+              </div>
+              <button class="toggle" id="soundBtn">Вкл</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig">Один игрок</div>
+                <div class="muted">игра только для Команды A</div>
+              </div>
+              <button class="toggle" id="soloBtn">Выкл</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cardFooter cardFooterSticky">
+        <div class="pill"><span class="dot cyan"></span> Команда A</div>
+        <div class="pill"><span class="dot magenta"></span> Команда B</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; flex:1;">
+          <button class="btn primary" id="applyBtn">Применить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ИТОГИ -->
+  <div class="endOverlay" id="endOverlay">
+    <div class="endCard">
+      <div class="cardHeader">
+        <div>
+          <h2>Время вышло!</h2>
+          <p class="muted">Итоговые очки:</p>
+        </div>
+        <button class="btn" id="closeEndBtn">Закрыть</button>
+      </div>
+
+      <div class="body">
+        <div class="result teamA">
+          <h3>Команда A</h3>
+          <div class="bigScore" id="finalA">0</div>
+        </div>
+        <div class="result teamB">
+          <h3>Команда B</h3>
+          <div class="bigScore" id="finalB">0</div>
+        </div>
+      </div>
+
+      <div class="cardFooter" style="justify-content:space-between;">
+        <div class="winner" id="winnerText">—</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+          <button class="btn" id="replayBtn">Сыграть ещё</button>
+          <button class="btn danger" id="hardResetBtn">Полный сброс</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
