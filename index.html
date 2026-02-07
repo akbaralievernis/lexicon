@@ -14,14 +14,14 @@
         <div class="logo" aria-hidden="true"></div>
         <div class="brandText">
           <h1>Lexicon Drive</h1>
-          <div class="subtitle">Собери предложение по порядку • Нажимай слова снизу</div>
+          <div class="subtitle" id="subtitle">Собери предложение по порядку • Нажимай слова снизу</div>
         </div>
       </div>
 
       <div class="timerBox" aria-live="polite">
-        <div class="timerLabel">Осталось</div>
+        <div class="timerLabel" id="timerLabel">Осталось</div>
         <div class="timer" id="globalTimer">60</div>
-        <div class="timerUnit">сек</div>
+        <div class="timerUnit" id="timerUnit">сек</div>
       </div>
 
       <div class="teacherBar">
@@ -42,11 +42,11 @@
       <!-- Team A -->
       <section class="team teamA" id="teamA">
         <div class="teamHeader">
-          <div class="teamName"><span class="badge"></span> Команда A</div>
+          <div class="teamName"><span class="badge"></span> <span id="teamATitle">Команда A</span></div>
           <div class="teamMeta">
-            <div class="pillSmall">Раунд: <span id="roundA">—</span></div>
-            <div class="pillSmall">Комбо: <span id="comboA">x1.0</span></div>
-            <div class="pillSmall">Счёт: <span class="score" id="scoreA">0</span></div>
+            <div class="pillSmall"><span id="roundLabel">Раунд:</span> <span id="roundA">—</span></div>
+            <div class="pillSmall"><span id="comboLabel">Комбо:</span> <span id="comboA">x1.0</span></div>
+            <div class="pillSmall"><span id="scoreLabel">Счёт:</span> <span class="score" id="scoreA">0</span></div>
           </div>
         </div>
 
@@ -63,6 +63,9 @@
           <div class="workArea">
             <div class="slots" id="slotsA"></div>
             <div class="tiles" id="tilesA"></div>
+            <div class="mathArea" id="mathAreaA" aria-label="Math answers">
+              <div class="mathOptions" id="mathOptionsA"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -70,11 +73,11 @@
       <!-- Team B -->
       <section class="team teamB" id="teamB">
         <div class="teamHeader">
-          <div class="teamName"><span class="badge"></span> Команда B</div>
+          <div class="teamName"><span class="badge"></span> <span id="teamBName">Команда B</span></div>
           <div class="teamMeta">
-            <div class="pillSmall">Раунд: <span id="roundB">—</span></div>
-            <div class="pillSmall">Комбо: <span id="comboB">x1.0</span></div>
-            <div class="pillSmall">Счёт: <span class="score" id="scoreB">0</span></div>
+            <div class="pillSmall"><span id="roundLabel">Раунд:</span> <span id="roundB">—</span></div>
+            <div class="pillSmall"><span id="comboLabel">Комбо:</span> <span id="comboB">x1.0</span></div>
+            <div class="pillSmall"><span id="scoreLabel">Счёт:</span> <span class="score" id="scoreB">0</span></div>
           </div>
         </div>
 
@@ -91,6 +94,9 @@
           <div class="workArea">
             <div class="slots" id="slotsB"></div>
             <div class="tiles" id="tilesB"></div>
+            <div class="mathArea" id="mathAreaB" aria-label="Math answers">
+              <div class="mathOptions" id="mathOptionsB"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -102,18 +108,18 @@
     <div class="card cardModal">
       <div class="cardHeader">
         <div>
-          <h2>Меню (настройка учителя)</h2>
-          <p class="muted">
+          <h2 id="menuTitle">Меню (настройка учителя)</h2>
+          <p class="muted" id="menuDesc">
             1 предложение = 1 раунд. Обе команды получают одинаковый текст и одинаковый порядок раундов.
           </p>
         </div>
-        <button class="btn" id="closeSetupBtn">Закрыть</button>
+        <button class="btn" id="closeSetupBtn"><span id="closeMenuText">Закрыть</span></button>
       </div>
 
       <div class="cardScroll">
         <div class="cardBody">
           <div class="field">
-            <label for="presetSelect">Готовые тексты</label>
+            <label for="presetSelect" id="presetLabel">Готовые тексты</label>
             <select id="presetSelect" class="select">
               <option value="custom">— Пользовательский текст (вставить ниже) —</option>
               <option value="rus_general">Русский — универсальный</option>
@@ -121,7 +127,7 @@
               <option value="rus_motivation">Русский — мотивационный</option>
             </select>
 
-            <label for="textInput">Текст для раундов</label>
+            <label for="textInput" id="textLabel">Текст для раундов</label>
             <textarea id="textInput" placeholder="Вставь текст. Лучше 8–14 слов в одном предложении."></textarea>
 
             <div class="hintBox">
@@ -130,6 +136,75 @@
           </div>
 
           <div class="settings">
+            <div class="setTitle" id="uiTitle">Интерфейс</div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig" id="langLabel">Язык</div>
+                <div class="muted" id="langHint">Русский / English / Кыргызча</div>
+              </div>
+              <select id="langSelect" class="select" style="max-width:160px;height:42px;">
+                <option value="ru">Русский</option>
+                <option value="en">English</option>
+                <option value="ky">Кыргызча</option>
+              </select>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig" id="themeLabel">Тема</div>
+                <div class="muted" id="themeHint">Светлая / Тёмная</div>
+              </div>
+              <button class="toggle" id="themeBtn">Светлая</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="labelBig" id="modeLabel">Режим</div>
+                <div class="muted" id="modeHint">Текст или Математика</div>
+              </div>
+              <select id="modeSelect" class="select" style="max-width:200px;height:42px;">
+                <option value="text">Текст</option>
+                <option value="math">Математика</option>
+              </select>
+            </div>
+
+            <div class="mathSettings" id="mathSettings">
+              <div class="row">
+                <div>
+                  <div class="labelBig" id="mathRoundsLabel">Раундов (математика)</div>
+                  <div class="muted" id="mathRoundsHint">сколько примеров за игру</div>
+                </div>
+                <div class="value" id="mathRoundsVal">12</div>
+              </div>
+              <input type="range" id="mathRoundsRange" min="6" max="30" step="1" value="12" />
+
+              <div class="row">
+                <div>
+                  <div class="labelBig" id="opsLabel">Операции</div>
+                  <div class="muted" id="opsHint">можно включить + и −</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                  <button class="toggle on" id="opPlusBtn">+</button>
+                  <button class="toggle on" id="opMinusBtn">−</button>
+                </div>
+              </div>
+
+              
+              <div class="row">
+                <div>
+                  <div class="labelBig" id="diffLabel">Сложность</div>
+                  <div class="muted" id="diffHint">Лёгкий / Средний / Тяжёлый</div>
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                  <button class="toggle on" id="diffEasyBtn">Easy</button>
+                  <button class="toggle" id="diffMediumBtn">Medium</button>
+                  <button class="toggle" id="diffHardBtn">Hard</button>
+                </div>
+              </div>
+
+            </div>
+
             <div class="setTitle">Сложность и режимы</div>
 
             <div class="row">
@@ -226,19 +301,19 @@
     <div class="endCard">
       <div class="cardHeader">
         <div>
-          <h2>Время вышло!</h2>
-          <p class="muted">Итоговые очки:</p>
+          <h2 id="timeUpTitle">Время вышло!</h2>
+          <p class="muted" id="finalScoresLabel">Итоговые очки:</p>
         </div>
-        <button class="btn" id="closeEndBtn">Закрыть</button>
+        <button class="btn" id="closeEndBtn"><span id="closeEndText">Закрыть</span></button>
       </div>
 
       <div class="body">
         <div class="result teamA">
-          <h3>Команда A</h3>
+          <h3><span id="teamAResult">Команда A</span></h3>
           <div class="bigScore" id="finalA">0</div>
         </div>
         <div class="result teamB">
-          <h3>Команда B</h3>
+          <h3><span id="teamBResult">Команда B</span></h3>
           <div class="bigScore" id="finalB">0</div>
         </div>
       </div>
@@ -246,8 +321,8 @@
       <div class="cardFooter" style="justify-content:space-between;">
         <div class="winner" id="winnerText">—</div>
         <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-          <button class="btn" id="replayBtn">Сыграть ещё</button>
-          <button class="btn danger" id="hardResetBtn">Полный сброс</button>
+          <button class="btn" id="replayBtn"><span id="replayText">Сыграть ещё</span></button>
+          <button class="btn danger" id="hardResetBtn"><span id="hardResetText">Полный сброс</span></button>
         </div>
       </div>
     </div>
