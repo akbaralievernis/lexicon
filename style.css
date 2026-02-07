@@ -34,8 +34,8 @@ html, body{
     linear-gradient(180deg, #fbfcff, var(--bg));
   color:var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  overflow:hidden;
-  touch-action: none; /* smartboard */
+  overflow:auto;
+  touch-action: pan-y; /* allow vertical scroll on phones */
 }
 
 .app{ height:100%; display:flex; flex-direction:column; }
@@ -509,6 +509,10 @@ input[type="range"]{
   background: rgba(18,201,121,.12);
   border-color: rgba(18,201,121,.25);
 }
+.toggle.disabled{
+  opacity: .55;
+  cursor: not-allowed;
+}
 
 .cardFooter{
   padding: 14px 18px;
@@ -600,8 +604,8 @@ input[type="range"]{
   :root{ --appH: 100vh; }
 }
 
-html, body{ height: var(--appH); }
-.app{ height: var(--appH); }
+html, body{ height: 100%; min-height: var(--appH); }
+.app{ min-height: var(--appH); height:auto; }
 
 /* safe-area для iPhone/планшетов с вырезами */
 .topbar{
@@ -820,3 +824,66 @@ body.solo .tiles{
     font-size: 16px;
   }
 }
+
+
+/* ===== Theme: Dark ===== */
+body.dark{
+  --bg: #0b1020;
+  --panel: rgba(18,20,39,.70);
+  --panel2: rgba(18,20,39,.52);
+  --text: #eef1ff;
+  --muted: rgba(238,241,255,.72);
+  --line: rgba(238,241,255,.12);
+  --shadow: 0 14px 44px rgba(0,0,0,.45);
+  --shadow2: 0 8px 22px rgba(0,0,0,.35);
+}
+body.dark{
+  background:
+    radial-gradient(900px 500px at 20% 0%, rgba(0,200,255,.10), transparent 60%),
+    radial-gradient(900px 500px at 80% 0%, rgba(255,47,179,.08), transparent 60%),
+    linear-gradient(180deg, #070a14, var(--bg));
+}
+body.dark .topbar{ background: rgba(11,16,32,.70); }
+body.dark .team{ background: rgba(15,20,44,.68); }
+body.dark .timerBox{ background: rgba(15,20,44,.70); }
+body.dark textarea, body.dark .select{ background: rgba(10,14,28,.65); color: var(--text); border-color: rgba(238,241,255,.14); }
+body.dark .btn, body.dark .tbtn{ background: rgba(238,241,255,.08); box-shadow: 0 0 0 1px rgba(238,241,255,.12) inset; }
+body.dark .btn:hover, body.dark .tbtn:hover{ background: rgba(238,241,255,.10); }
+body.dark .tile{ background: rgba(10,14,28,.75); border-color: rgba(238,241,255,.14); }
+body.dark .slot{ background: rgba(10,14,28,.55); border-color: rgba(238,241,255,.18); color: rgba(238,241,255,.50); }
+body.dark .card{ background: rgba(12,16,34,.82); }
+body.dark .cardFooterSticky{ background: rgba(12,16,34,.82); }
+
+
+/* ===== Math mode (3 options) ===== */
+.mathArea{ display:none; }
+.mathOptions{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.mathBtn{
+  border:0;
+  border-radius: 16px;
+  min-height: clamp(52px, 8vw, 74px);
+  font-size: clamp(18px, 4.2vw, 30px);
+  font-weight: 1000;
+  letter-spacing: .6px;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: var(--shadow2);
+  cursor:pointer;
+  user-select:none;
+}
+.mathBtn:active{ transform: translate3d(0,1px,0) scale(.99); }
+body.dark .mathBtn{ background: rgba(10,14,28,.75); border-color: rgba(238,241,255,.14); }
+.mathBtn.good{ outline: 3px solid rgba(18,201,121,.40); }
+.mathBtn.bad{ outline: 3px solid rgba(255,59,95,.40); }
+
+body.mode-math .slots, body.mode-math .tiles{ display:none; }
+body.mode-math .mathArea{ display:block; }
+body.mode-math .btn.small#hintA, body.mode-math .btn.small#hintB{ display:none; }
+#mathSettings{ display:none; }
+body.mode-math #mathSettings{ display:block; }
+body.mode-math #presetSelect, body.mode-math #textInput, body.mode-math #presetLabel, body.mode-math #textLabel{ display:none; }
